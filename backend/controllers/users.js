@@ -1,4 +1,12 @@
+import bcrypt from 'bcryptjs';
 import UserModel from '../models/user.js';
+
+// função para o hash
+function createHash(password) {
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+  return hash;
+}
 
 async function listUsers() {
   try {
@@ -29,8 +37,14 @@ async function getUserById(_id) {
 
 async function createUser(items) {
   try {
-    const { name, about, avatar } = items;
-    const newUser = new UserModel({ name, about, avatar });
+    const { email, password, name, about, avatar } = items;
+    const newUser = new UserModel({
+      email,
+      password: createHash(password),
+      name,
+      about,
+      avatar,
+    });
     const creatUser = await newUser.save();
     return creatUser;
   } catch (error) {
@@ -110,10 +124,28 @@ async function updateUserAvatar(_id, body = {}) {
   }
 }
 
+// criação de um controlador para o login
+async function login(items) {
+  try {
+    const { email, password } = items;
+    const foundUser = UserModel.findUserByCredentials({
+      email,
+      password,
+    });
+    if (foundUser.error) {
+      throw new Error('E-mail ou senha incorretos');
+    }
+    return { id: foundUser.id };
+  } catch (error) {
+    throw new Error('Não foi possivel logar o usuário');
+  }
+}
+
 export {
   listUsers,
   getUserById,
   createUser,
   updateUserInfo,
   updateUserAvatar,
+  login,
 };

@@ -2,6 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import userRouter from './routes/users.js';
 import cardRouter from './routes/cards.js';
+//import { login } from './controllers/users.js';
+
+// No app.js, crie dois manipuladores POST para duas rotas, '/signin' e '/signup'
+
+// app.post('/signin', login);
+// app.post('/signup', createUser);
 
 async function connectDatabase() {
   try {
@@ -45,6 +51,10 @@ app.use(logger);
 app.use('/users', userRouter);
 
 app.use('/cards', cardRouter);
+
+//app.post('/signin', login);
+
+// app.post('/signup', createUser);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
