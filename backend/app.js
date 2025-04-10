@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import userRouter from './routes/users.js';
 import cardRouter from './routes/cards.js';
-//import { login } from './controllers/users.js';
+import { login, createUser } from './controllers/users.js';
 
 // No app.js, crie dois manipuladores POST para duas rotas, '/signin' e '/signup'
 
@@ -52,9 +52,53 @@ app.use('/users', userRouter);
 
 app.use('/cards', cardRouter);
 
-//app.post('/signin', login);
+app.post('/signin', async (request, response) => {
+  try {
+    const { email, password } = request.body;
+    const loggedUser = await login({
+      email,
+      password,
+    });
+    return response.status(200).json(loggedUser);
+  } catch (error) {
+    const { message, statusCode, type } = error;
+    if (!error.statusCode) {
+      error.statusCode = 400;
+      error.type = 'Validação interna';
+    }
+    return response.status(statusCode).json({
+      type,
+      message,
+    });
+  }
+});
 
-// app.post('/signup', createUser);
+app.post('/signup', async (request, response) => {
+  try {
+    const { email, password, name, about, avatar } = request.body;
+    const createdUser = await createUser({
+      email,
+      password,
+      name,
+      about,
+      avatar,
+    });
+    return response.status(201).json(createdUser);
+  } catch (error) {
+    const { message, statusCode, type } = error;
+    if (!error.statusCode) {
+      error.statusCode = 400;
+      error.type = 'Validação interna';
+    }
+    if (error.message.includes('email')) {
+      error.message = 'Email já cadastrado';
+    }
+    return response.status(statusCode).json({
+      type,
+      message,
+    });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

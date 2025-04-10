@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import UserModel from '../models/user.js';
+import jwt from 'jsonwebtoken';
 
 // função para o hash
 function createHash(password) {
@@ -133,9 +134,12 @@ async function login(items) {
       password,
     });
     if (foundUser.error) {
-      throw new Error('E-mail ou senha incorretos');
+      throw new Error('E-mail ou senha incorretos').status(401);
     }
-    return { id: foundUser.id };
+    const token = jwt.sign({ ...foundUser }, 'jwt-secreto', {
+      expiresIn: '7d',
+    });
+    return { id: foundUser.id, token };
   } catch (error) {
     throw new Error('Não foi possivel logar o usuário');
   }

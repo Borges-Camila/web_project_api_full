@@ -2,10 +2,8 @@ import { Router } from 'express';
 import {
   listUsers,
   getUserById,
-  createUser,
   updateUserInfo,
   updateUserAvatar,
-  login,
 } from '../controllers/users.js';
 
 const router = Router();
@@ -43,35 +41,6 @@ router.get('/:_id', async (request, response) => {
     return response.status(404).json({
       error:
         'ERROR: Não foi possivel encontrar o usuário especificado',
-    });
-  }
-});
-
-// criação de novo usuário
-
-router.post('/', async (request, response) => {
-  try {
-    const { email, password, name, about, avatar } = request.body;
-    const createdUser = await createUser({
-      email,
-      password,
-      name,
-      about,
-      avatar,
-    });
-    return response.status(201).json(createdUser);
-  } catch (error) {
-    const { message, statusCode, type } = error;
-    if (!error.statusCode) {
-      error.statusCode = 400;
-      error.type = 'Validação interna';
-    }
-    if (error.message.includes('email')) {
-      error.message = 'Email já cadastrado';
-    }
-    return response.status(statusCode).json({
-      type,
-      message,
     });
   }
 });
@@ -115,29 +84,6 @@ router.patch('/me/avatar', async (request, response) => {
   } catch (error) {
     return response.status(400).json({
       error: 'ERROR: Não foi possivel atualizar o usuário',
-    });
-  }
-});
-
-// login do usuário
-
-router.post('/signin', async (request, response) => {
-  try {
-    const { email, password } = request.body;
-    const loggedUser = await login({
-      email,
-      password,
-    });
-    return response.status(200).json(loggedUser);
-  } catch (error) {
-    const { message, statusCode, type } = error;
-    if (!error.statusCode) {
-      error.statusCode = 400;
-      error.type = 'Validação interna';
-    }
-    return response.status(statusCode).json({
-      type,
-      message,
     });
   }
 });
