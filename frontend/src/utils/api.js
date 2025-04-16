@@ -1,4 +1,5 @@
 import { getToken } from "./token";
+process.env.url;
 
 class Api {
   constructor({ baseUrl }) {
@@ -68,27 +69,10 @@ class Api {
       headers: this._getHeaders(),
     });
   }
-
-  //  addLikes({ cardId, isLiked }) {
-  //   return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-  //    method: "PUT",
-  //      headers: this._getHeaders(),
-  //    body: JSON.stringify({
-  //    status: isLiked,
-  //   }),
-  //  });
-  // }
-
-  //  removeLikes(cardId) {
-  //  return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-  //  method: "DELETE",
-  ///     headers: this._getHeaders(),
-  //  });
-  // }
 }
 
 const api = new Api({
-  baseUrl: "http://localhost:3001",
+  baseUrl: url,
 });
 
 export default api;

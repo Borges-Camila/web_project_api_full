@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.js';
 import CustomError from '../utils/CustomError.js';
 
+const { JWT_SECRET } = process.env;
+
 // função para o hash
 function createHash(password) {
   const salt = bcrypt.genSaltSync(10);
@@ -175,7 +177,7 @@ async function login(items) {
     }
     const token = jwt.sign(
       { id: String(foundUser.id) },
-      'jwt-secreto',
+      JWT_SECRET,
       {
         expiresIn: '7d',
       },

@@ -12,9 +12,11 @@ import {
   errorLogger,
 } from './middleware/logger.js';
 
+const { MONGODB_URL } = process.env;
+
 async function connectDatabase() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/aroundb', {
+    await mongoose.connect(MONGODB_URL, {
       serverSelectionTimeoutMS: 10000,
     });
     console.log('Database connect');
