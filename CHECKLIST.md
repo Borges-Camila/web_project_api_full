@@ -90,9 +90,9 @@
 
 ### ✅ Funcionalidades completas
 
-- [ ] Cadastro e login
-- [ ] Edição de perfil
-- [ ] Criar, curtir e deletar cartões
+- [ X ] Cadastro e login
+- [ X ] Edição de perfil
+- [ X ] Criar, curtir e deletar cartões
 
 ### 🌐 CORS
 
@@ -100,8 +100,8 @@
 
 ### 🔐 Variáveis de Ambiente
 
-- [ ] Criar `.env` com `JWT_SECRET` e `NODE_ENV=production`
-- [ ] Garantir funcionamento sem `.env` em dev
+- [ X ] Criar `.env` com `JWT_SECRET` e `NODE_ENV=production`
+- [ X ] Garantir funcionamento sem `.env` em dev
 
 ### 🌍 Nome de Domínio e nginx
 

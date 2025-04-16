@@ -14,10 +14,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      //     validate: {
-      //      validator: (email) => validator.isEmail(email),
-      //       message: 'O e-mail informado é inválido.',
-      //    },
+      validate: {
+        validator: (email) => validator.isEmail(email),
+        message: 'O e-mail informado é inválido.',
+      },
     },
     password: {
       type: String,
@@ -40,12 +40,12 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       required: true,
-      //     validate: {
-      //      validator(validity) {
-      //        return linkRegex.test(validity);
-      //      },
-      //      message: (props) => `'${props.value}' é um link inválido`,
-      //     },
+      validate: {
+        validator(validity) {
+          return linkRegex.test(validity);
+        },
+        message: (props) => `'${props.value}' é um link inválido`,
+      },
     },
   },
   {
