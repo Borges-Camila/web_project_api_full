@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
-import UserModel from '../models/user.js';
 import jwt from 'jsonwebtoken';
+import UserModel from '../models/user.js';
+import CustomError from '../utils/CustomError.js';
 
 // função para o hash
 function createHash(password) {
@@ -9,20 +10,13 @@ function createHash(password) {
   return hash;
 }
 
-async function listUsers() {
-  try {
-    const users = await UserModel.find();
-    return users;
-  } catch (error) {
-    throw new Error(
-      'Não foi possivel encontrar os usuários',
-    ).mongoError('Mongo - get users');
-  }
-}
+// controladores
 
-async function getUserById(_id) {
+// atualizar o erro
+
+async function getUser(id) {
   try {
-    const user = await UserModel.findById(_id);
+    const user = await UserModel.findById(id);
     if (!user) {
       throw new Error(
         'Não foi possivel encontrar o usuário especificado',
@@ -38,7 +32,21 @@ async function getUserById(_id) {
 
 async function createUser(items) {
   try {
-    const { email, password, name, about, avatar } = items;
+    const {
+      email,
+      password,
+      name = 'Novo usuário',
+      about = 'sobre o usuário',
+      avatar = 'https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg',
+    } = items;
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      throw new CustomError(
+        'Email já cadastrado',
+        500,
+        'Conflito',
+      );
+    }
     const newUser = new UserModel({
       email,
       password: createHash(password),
@@ -49,29 +57,37 @@ async function createUser(items) {
     const creatUser = await newUser.save();
     return creatUser;
   } catch (error) {
-    throw new Error('Não foi possivel criar o usuário').mongoError(
-      'Mongo - create user',
+    throw new CustomError(
+      'Não foi possível criar o usuário',
+      400,
+      'Erro de validação',
     );
   }
 }
 
-async function updateUserInfo(_id, body = {}) {
+async function updateUserInfo(id, body = {}) {
   try {
     if (!body || typeof body !== 'object') {
-      throw new Error('O corpo da requisição está inválido.');
+      throw new CustomError(
+        'Dados inválidos para atualização',
+        400,
+        'Requisição',
+      );
     }
 
-    const foundUser = await UserModel.findById(_id);
+    const foundUser = await UserModel.findById(id);
     if (!foundUser) {
-      throw new Error(
+      throw new CustomError(
         'Não foi possivel encontrar o usuário especificado',
-      ).mongoError('Mongo - get user by id');
+        400,
+        'MongoDB - get by id',
+      );
     }
 
     const { name, about } = body;
 
     const updatedUser = UserModel.findByIdAndUpdate(
-      _id,
+      id,
       { name, about },
       {
         new: true,
@@ -80,33 +96,45 @@ async function updateUserInfo(_id, body = {}) {
       },
     );
     if (!updatedUser) {
-      throw new Error('Erro ao atualizar usuário');
+      throw new CustomError(
+        'Usuário não atualizado',
+        404,
+        'Recurso',
+      );
     }
     return updatedUser;
   } catch (error) {
-    throw new Error(
-      'Não foi possivel atualizar as informações do usuário',
+    throw new CustomError(
+      'Erro ao atualizar informações do usuário',
+      500,
+      'MongoDB',
     );
   }
 }
 
-async function updateUserAvatar(_id, body = {}) {
+async function updateUserAvatar(id, body = {}) {
   try {
     if (!body || typeof body !== 'object') {
-      throw new Error('O corpo da requisição está inválido.');
+      throw new CustomError(
+        'Dados inválidos para atualização do avatar',
+        400,
+        'Requisição',
+      );
     }
 
-    const foundUser = await UserModel.findById(_id);
+    const foundUser = await UserModel.findById(id);
     if (!foundUser) {
-      throw new Error(
+      throw new CustomError(
         'Não foi possivel encontrar o usuário especificado',
-      ).mongoError('Mongo - get user by id');
+        400,
+        'MongoDB - get by id',
+      );
     }
 
     const { avatar } = body;
 
     const updatedAvatar = UserModel.findByIdAndUpdate(
-      _id,
+      id,
       { avatar },
       {
         new: true,
@@ -115,39 +143,55 @@ async function updateUserAvatar(_id, body = {}) {
       },
     );
     if (!updatedAvatar) {
-      throw new Error('Erro ao atualizar usuário');
+      throw new CustomError(
+        'Usuário não encontrado para atualizar avatar',
+        404,
+        'Recurso',
+      );
     }
     return updatedAvatar;
   } catch (error) {
-    throw new Error(
-      'Não foi possivel atualizar as informações do usuário',
+    throw new CustomError(
+      'Erro ao atualizar avatar do usuário',
+      500,
+      'MongoDB',
     );
   }
 }
 
-// criação de um controlador para o login
 async function login(items) {
   try {
     const { email, password } = items;
-    const foundUser = UserModel.findUserByCredentials({
+    const foundUser = await UserModel.findUserByCredentials({
       email,
       password,
     });
     if (foundUser.error) {
-      throw new Error('E-mail ou senha incorretos').status(401);
+      throw new CustomError(
+        'Email ou senha incorretos',
+        401,
+        'Autenticação',
+      );
     }
-    const token = jwt.sign({ ...foundUser }, 'jwt-secreto', {
-      expiresIn: '7d',
-    });
+    const token = jwt.sign(
+      { id: String(foundUser.id) },
+      'jwt-secreto',
+      {
+        expiresIn: '7d',
+      },
+    );
     return { id: foundUser.id, token };
   } catch (error) {
-    throw new Error('Não foi possivel logar o usuário');
+    throw new CustomError(
+      'Erro ao realizar login',
+      500,
+      'Autenticação',
+    );
   }
 }
 
 export {
-  listUsers,
-  getUserById,
+  getUser,
   createUser,
   updateUserInfo,
   updateUserAvatar,

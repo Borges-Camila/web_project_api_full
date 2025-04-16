@@ -1,91 +1,93 @@
 import { Router } from 'express';
+import { celebrate, Joi } from 'celebrate';
+import validator from 'validator';
 import {
-  listUsers,
-  getUserById,
+  getUser,
   updateUserInfo,
   updateUserAvatar,
 } from '../controllers/users.js';
 
 const router = Router();
 
-// procura os usuários
-
-router.get('/', async (request, response) => {
-  try {
-    const users = await listUsers();
-    return response.json(users);
-  } catch (error) {
-    console.log(error);
-    return response.status(404).json({
-      error: 'ERROR: Não foi possivel encontrar os usuários',
-    });
+const urlValidator = (value, helpers) => {
+  if (!validator.isURL(value)) {
+    return helpers.error('string.uri');
   }
+  return value;
+};
+
+const validateUserUpdate = celebrate({
+  body: Joi.object().keys({
+    _id: Joi.string().alphanum().length(24),
+    name: Joi.string().min(2).max(30).required(),
+    about: Joi.string().min(2).max(30).required(),
+  }),
+});
+const validateAvatarUpdate = celebrate({
+  body: Joi.object().keys({
+    _id: Joi.string().alphanum().length(24),
+    avatar: Joi.string().custom(urlValidator).required(),
+  }),
 });
 
-// procura usuário pelo id
+// procura os usuários
 
-router.get('/:_id', async (request, response) => {
+router.get('/me', async (request, response, next) => {
   try {
-    const { _id } = request.params;
-    const foundUser = await getUserById(_id);
-
-    if (!foundUser) {
-      return response
-        .status(404)
-        .json({ message: `${_id} do usuário não encontrado` });
-    }
-
-    return response.json(foundUser);
+    const user = await getUser(request.user.id);
+    return response.json(user);
   } catch (error) {
-    console.log(error);
-    return response.status(404).json({
-      error:
-        'ERROR: Não foi possivel encontrar o usuário especificado',
-    });
+    next(error);
   }
 });
 
 // atualização de usuário (name, about)
 
-router.patch('/me', async (request, response) => {
-  try {
-    const { _id, name, about } = request.body;
-    if (!_id) {
-      return response
-        .status(400)
-        .json({ error: 'ID do usuário não fornecido' });
+router.patch(
+  '/me',
+  validateUserUpdate,
+  async (request, response, next) => {
+    try {
+      const { name, about } = request.body;
+      const userId = request.user.id;
+      if (!userId) {
+        return response
+          .status(400)
+          .json({ error: 'ID do usuário não fornecido' });
+      }
+      const updatedUserInfo = await updateUserInfo(userId, {
+        name,
+        about,
+      });
+      return response.status(200).json(updatedUserInfo);
+    } catch (error) {
+      next(error);
     }
-    const updatedUserInfo = await updateUserInfo(_id, {
-      name,
-      about,
-    });
-    return response.status(200).json(updatedUserInfo);
-  } catch (error) {
-    return response.status(400).json({
-      error: 'ERROR: Não foi possivel atualizar o usuário',
-    });
-  }
-});
+  },
+);
 
 // atualização de usuário (avatar)
 
-router.patch('/me/avatar', async (request, response) => {
-  try {
-    const { _id, avatar } = request.body;
-    if (!_id) {
-      return response
-        .status(400)
-        .json({ error: 'ID do usuário não fornecido' });
+router.patch(
+  '/me/avatar',
+  validateAvatarUpdate,
+  async (request, response, next) => {
+    try {
+      const { avatar } = request.body;
+      const userId = request.user.id;
+      if (!userId) {
+        return response
+          .status(400)
+          .json({ error: 'ID do usuário não fornecido' });
+      }
+      const updatedUserAvatar = await updateUserAvatar(userId, {
+        avatar,
+      });
+      return response.status(200).json(updatedUserAvatar);
+    } catch (error) {
+      next(error);
     }
-    const updatedUserAvatar = await updateUserAvatar(_id, {
-      avatar,
-    });
-    return response.status(200).json(updatedUserAvatar);
-  } catch (error) {
-    return response.status(400).json({
-      error: 'ERROR: Não foi possivel atualizar o usuário',
-    });
-  }
-});
+  },
+);
 
 export default router;

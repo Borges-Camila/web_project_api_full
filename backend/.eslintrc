@@ -14,6 +14,7 @@
     "no-console": "off",
     "linebreak-style": "off",
     "import/extensions": ["error", "ignorePackages"],
-    "object-curly-newline": ["off"]
+    "object-curly-newline": ["off"],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
   }
 }

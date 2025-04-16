@@ -14,15 +14,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      validate: {
-        validator: (email) => validator.isEmail(email),
-        message: 'O e-mail informado é inválido.',
-      },
+      //     validate: {
+      //      validator: (email) => validator.isEmail(email),
+      //       message: 'O e-mail informado é inválido.',
+      //    },
     },
     password: {
       type: String,
       required: true,
       minlength: 8,
+      select: false,
     },
     name: {
       type: String,
@@ -39,12 +40,12 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       required: true,
-      validate: {
-        validator(validity) {
-          return linkRegex.test(validity);
-        },
-        message: (props) => `'${props.value}' é um link inválido`,
-      },
+      //     validate: {
+      //      validator(validity) {
+      //        return linkRegex.test(validity);
+      //      },
+      //      message: (props) => `'${props.value}' é um link inválido`,
+      //     },
     },
   },
   {
@@ -54,7 +55,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.statics.findUserByCredentials =
   async function findUserByCredentials({ email, password }) {
-    const user = await this.findOne({ email });
+    const user = await this.findOne({ email }).select('+password');
     if (!user) {
       return {
         error: `User ${email} and/or password was not found.`,
