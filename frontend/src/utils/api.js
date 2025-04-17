@@ -1,5 +1,4 @@
 import { getToken } from "./token";
-import.meta.env.VITE_URL;
 
 class Api {
   constructor({ baseUrl }) {
@@ -72,7 +71,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: VITE_URL,
+  baseUrl: import.meta.env.VITE_URL,
 });
 
 export default api;
