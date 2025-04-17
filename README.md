@@ -4,7 +4,8 @@ Este repositório contém a versão final do projeto full-stack desenvolvido ao 
 
 ## 📁 Estrutura do Projeto
 
-```web_project_api_full/
+```
+web_project_api_full/
 ├── backend/ # API com Node.js, Express, MongoDB, JWT, Joi, Celebrate
 ├── frontend/ # Aplicação React com autenticação e rotas protegidas
 ├── .gitignore
@@ -61,20 +62,23 @@ Este repositório contém a versão final do projeto full-stack desenvolvido ao 
 
 ### Clone o repositório
 
-```git clone https://github.com/seu-usuario/web_project_api_full.git
+```
+git clone https://github.com/seu-usuario/web_project_api_full.git
 cd web_project_api_full
 ```
 
 ### Back-end
 
-```cd backend
+```
+cd backend
 npm install
 npm run start
 ```
 
 ### Front-end
 
-```cd ../frontend
+```
+cd ../frontend
 npm install
 npm run dev
 ```
