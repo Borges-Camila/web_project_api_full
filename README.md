@@ -4,11 +4,12 @@ Este repositório contém a versão final do projeto full-stack desenvolvido ao 
 
 ## 📁 Estrutura do Projeto
 
-web_project_api_full/
+```web_project_api_full/
 ├── backend/ # API com Node.js, Express, MongoDB, JWT, Joi, Celebrate
 ├── frontend/ # Aplicação React com autenticação e rotas protegidas
 ├── .gitignore
 ├── README.md
+```
 
 ## 🌐 Funcionalidades da Aplicação
 
