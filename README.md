@@ -32,7 +32,7 @@ web_project_api_full/
 
 ## 📦 Tecnologias Utilizadas
 
-Back-end:
+**Back-end:**
 
 - Node.js
 - Express.js
@@ -42,7 +42,7 @@ Back-end:
 - Winston + express-winston (logs)
 - CORS
 
-Front-end:
+**Front-end:**
 
 - React
 - React Router
@@ -52,52 +52,55 @@ Front-end:
 
 ## ⚙️ Instalação Local
 
-Pré-requisitos:
+### Pré-requisitos:
 
 - Node.js
 - MongoDB
 - npm ou yarn
 
-1. Clone o repositório
+### Clone o repositório
 
-git clone https://github.com/seu-usuario/web_project_api_full.git
+```git clone https://github.com/seu-usuario/web_project_api_full.git
 cd web_project_api_full
+```
 
-2. Back-end
+### Back-end
 
-cd backend
+```cd backend
 npm install
 npm run start
+```
 
-3. Front-end
+### Front-end
 
-cd ../frontend
+```cd ../frontend
 npm install
 npm run dev
+```
 
 ## 🔗 Domínio do Projeto
 
 Acesse o projeto em produção:
 
-👉 https://seusite.exemplo.com
-API: https://api.seusite.exemplo.com
+👉 https://web-project-api-full-eta.vercel.app/
+**API**: https://web-project-api-full-58cc.onrender.com
 
 ## ✅ Checklist Final
 
-[ ] Registro e login com JWT
+[ X ] Registro e login com JWT
 
-[ ] Hash de senha com bcrypt
+[ X ] Hash de senha com bcrypt
 
-[ ] Edição e visualização de perfil
+[ X ] Edição e visualização de perfil
 
-[ ] CRUD de cartões com validação
+[ X ] CRUD de cartões com validação
 
-[ ] Proteção de rotas com middleware
+[ X ] Proteção de rotas com middleware
 
-[ ] Middleware central de erros
+[ X ] Middleware central de erros
 
-[ ] Logs de requisição e erros
+[ X ] Logs de requisição e erros
 
-[ ] Front-end e back-end integrados
+[ X ] Front-end e back-end integrados
 
-[ ] Deploy com domínio, HTTPS e PM2
+[ X ] Deploy

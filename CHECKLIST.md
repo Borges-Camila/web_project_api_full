@@ -82,11 +82,14 @@
 
 ## ☁️ Fase III: Deploy no Servidor
 
-### 🚀 Subida da API
+### 🚀 Subida do Backend
 
-- [ ] Criar servidor remoto (ex: GCP, Azure, etc.)
-- [ ] Instalar dependências e rodar o projeto
-- [ ] Testar a API pelo IP
+- [ X ] Subir o banco de dados para o Mongo Atlas
+- [ X ] Deploy no Render
+
+### 🌍 Subida do Frontend
+
+- [ X ] Deploy na Vercel
 
 ### ✅ Funcionalidades completas
 
@@ -103,26 +106,17 @@
 - [ X ] Criar `.env` com `JWT_SECRET` e `NODE_ENV=production`
 - [ X ] Garantir funcionamento sem `.env` em dev
 
-### 🌍 Nome de Domínio e nginx
-
-- [ ] Configurar domínio personalizado ou FreeDNS
-- [ ] Configurar nginx para servir front + back
-
-### 🛡️ HTTPS
-
-- [ ] Gerar certificados SSL (Let's Encrypt ou outro)
-
 ### 💥 Teste de Crash
 
-- [ ] Criar rota `/crash-test` que derruba o servidor
-- [ ] Usar PM2 para reiniciar automaticamente
+- [ X ] Criar rota `/crash-test` que derruba o servidor
+- [ X ] Usar PM2 para reiniciar automaticamente
 
 ---
 
 ## 📌 Finalização
 
-- [ ] Remover rota `/crash-test`
-- [ ] Atualizar `README.md` com URL do projeto
-- [ ] Testar todas as funcionalidades
-- [ ] Fazer o deploy final 🚀🎉
-- [ ] Atualizar `gitignore`
+- [ X ] Remover rota `/crash-test`
+- [ X ] Atualizar `README.md` com URL do projeto
+- [ X ] Testar todas as funcionalidades
+- [ X ] Fazer o deploy final 🚀🎉
+- [ X ] Atualizar `gitignore`
