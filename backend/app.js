@@ -12,7 +12,7 @@ import {
   errorLogger,
 } from './middleware/logger.js';
 
-const { MONGODB_URL } = process.env;
+const { MONGODB_URL, SERVER_URL } = process.env;
 
 async function connectDatabase() {
   try {
@@ -140,7 +140,8 @@ app.post(
 );
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on ${SERVER_URL}`);
+  console.log(MONGODB_URL);
 });
 
 app.use(errorLogger);
