@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import * as auth from "../utils/auth";
 import Popup from "./Main/components/Popup/Popup";
 import { getToken } from "../utils/token";
+import { routesIndex } from "../routes";
 
 function App() {
   const [currentUser, setCurrentUser] = useState();
@@ -28,14 +29,14 @@ function App() {
   async function handleCheckToken() {
     const { token } = getToken();
     if (!token) {
-      navigate("/signin");
+      navigate(routesIndex.signin);
       return;
     }
 
     try {
       const response = await auth.checkToken(token);
       if (response.status === 401 || response.status === 400) {
-        navigate("/signin");
+        navigate(routesIndex.signin);
         throw new Error(`Chamada inválida: ${response.status}`);
       }
       const data = await response.json();
@@ -55,7 +56,7 @@ function App() {
         }))
       );
       setIsLoggedIn(true);
-      navigate(location.state?.from || "/");
+      navigate(location.state?.from || routesIndex.mainPage);
     } catch (error) {
       console.log("ERROR - LOGIN:", error);
     }
@@ -91,7 +92,7 @@ function App() {
 
   useEffect(() => {
     getUserInfo();
-  }, []);
+  }, [isLoggedIn]);
 
   // faz o update das infos do usuário
   const handleUpdateUser = (data) => {
@@ -220,7 +221,7 @@ function App() {
         {/* Essa é a rota que deve ser envolvida com o protectedroute */}
 
         <Route
-          path="/signup"
+          path={routesIndex.signup}
           element={
             <div className="page">
               <Register onOpenPopup={handleOpenPopup} />
@@ -229,7 +230,7 @@ function App() {
         />
 
         <Route
-          path="/signin"
+          path={routesIndex.signin}
           element={
             <div className="page">
               <Login

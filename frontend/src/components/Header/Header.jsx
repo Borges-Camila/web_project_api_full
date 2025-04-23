@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router";
 import logo from "../../images/Logo.png";
 import { useEffect, useState } from "react";
+import { routesIndex } from "../../routes";
 
 function Header({ handleLogout }) {
   const location = useLocation();
@@ -16,16 +17,16 @@ function Header({ handleLogout }) {
 
   const getNavLink = () => {
     switch (location.pathname) {
-      case "/":
+      case routesIndex.mainPage:
         return (
           <>
             <p>{userEmail}</p> <Link onClick={handleLogout}>Sair</Link>
           </>
         );
-      case "/signup":
-        return <Link to="/signin">Faça o Login</Link>;
-      case "/signin":
-        return <Link to="/signup">Entrar</Link>;
+      case routesIndex.signup:
+        return <Link to={routesIndex.signin}>Faça o Login</Link>;
+      case routesIndex.signin:
+        return <Link to={routesIndex.signup}>Entrar</Link>;
     }
   };
 

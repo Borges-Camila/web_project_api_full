@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { authorize } from "../../utils/auth";
 import InfoTooltip from "../Main/components/Popup/components/InfoTooltip/InfoTooltip";
+import { routesIndex } from "../../routes";
 
 function Login({ setIsLoggedIn, onOpenPopup }) {
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ function Login({ setIsLoggedIn, onOpenPopup }) {
       localStorage.setItem("jwt", JSON.stringify(data.token));
       localStorage.setItem("userEmail", email);
       setIsLoggedIn(true);
-      navigate("/");
+      navigate(routesIndex.mainPage);
     } catch (error) {
       onOpenPopup({
         title: "",
@@ -69,7 +70,7 @@ function Login({ setIsLoggedIn, onOpenPopup }) {
           Entrar
         </button>
       </form>
-      <Link to="/signup" className="page__call-link">
+      <Link to={routesIndex.signup} className="page__call-link">
         Ainda não é membro? Inscreva-se aqui!
       </Link>
     </div>

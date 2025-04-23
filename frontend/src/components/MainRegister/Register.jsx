@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { register } from "../../utils/auth";
 import InfoTooltip from "../Main/components/Popup/components/InfoTooltip/InfoTooltip";
+import { routesIndex } from "../../routes";
 
 function Register({ onOpenPopup }) {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ function Register({ onOpenPopup }) {
         title: "",
         children: <InfoTooltip state={true} />,
       });
-      navigate("/signin");
+      navigate(routesIndex.signin);
     } catch (error) {
       onOpenPopup({
         title: "",
@@ -69,7 +70,7 @@ function Register({ onOpenPopup }) {
           Inscrever-se
         </button>
       </form>
-      <Link to="/signin" className="page__call-link">
+      <Link to={routesIndex.signin} className="page__call-link">
         Já é um membro? Faça o login aqui!
       </Link>
     </div>
