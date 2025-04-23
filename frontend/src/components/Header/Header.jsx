@@ -1,26 +1,17 @@
 import { Link, useLocation } from "react-router";
 import logo from "../../images/Logo.png";
-import { useEffect, useState } from "react";
 import { routesIndex } from "../../routes";
 
-function Header({ handleLogout }) {
+function Header({ handleLogout, currentUser }) {
   const location = useLocation();
-
-  const [userEmail, setUserEmail] = useState("");
-
-  useEffect(() => {
-    const email = localStorage.getItem("userEmail");
-    if (email) {
-      setUserEmail(email);
-    }
-  }, []);
 
   const getNavLink = () => {
     switch (location.pathname) {
       case routesIndex.mainPage:
         return (
           <>
-            <p>{userEmail}</p> <Link onClick={handleLogout}>Sair</Link>
+            {currentUser && currentUser.email && <p>{currentUser.email}</p>}{" "}
+            <Link onClick={handleLogout}>Sair</Link>
           </>
         );
       case routesIndex.signup:

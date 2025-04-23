@@ -196,7 +196,7 @@ function App() {
         handleAddPlaceSubmit,
       }}
     >
-      <Header handleLogout={handleLogout} />
+      <Header handleLogout={handleLogout} currentUser={currentUser} />
       <Routes>
         {/* Essa é a rota que deve ser envolvida com o protectedroute */}
 
