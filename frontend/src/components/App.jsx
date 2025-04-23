@@ -90,8 +90,26 @@ function App() {
       });
   }
 
+  // Pega os cartões iniciais
+  async function getInitialCards() {
+    await api
+      .getInitialCards()
+      .then((res) => res.json())
+      .then((cards) => {
+        console.log("Cards recebidos:", cards);
+        cards.map((card) => ({
+          ...card,
+          isLiked: card.likes.includes(currentUser?._id),
+        }));
+      })
+      .catch((error) => {
+        console.log("Erro ao buscar cards:", error.message || error);
+      });
+  }
+
   useEffect(() => {
     getUserInfo();
+    getInitialCards();
   }, [isLoggedIn]);
 
   // faz o update das infos do usuário
@@ -132,23 +150,6 @@ function App() {
         });
     })();
   };
-
-  // Pega os cartões iniciais
-  useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => res.json())
-      .then((cards) => {
-        console.log("Cards recebidos:", cards);
-        cards.map((card) => ({
-          ...card,
-          isLiked: card.likes.includes(currentUser?._id),
-        }));
-      })
-      .catch((error) => {
-        console.log("Erro ao buscar cards:", error.message || error);
-      });
-  }, []);
 
   // Função de dar like nos cartões
   async function handleCardLike(card) {
